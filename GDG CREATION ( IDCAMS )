@@ -6,3 +6,16 @@
    LIMIT(10) -
    SCRATCH() -
 /*
+
+
+**************************************
+#######  CREATE NEW GENERATION  ######
+//OUTFIL DD DSN=MY.TEST.GDG(+1),
+//          DISP=(NEW,CATLG,DELETE)
+
+
+***************************************
+//DSN=MY.TEST.GDG(0)      -  CURRENT GEN 
+
+//DSN=MY.TEST.GDG(-1)     -  PREVIOUS GEN
+
