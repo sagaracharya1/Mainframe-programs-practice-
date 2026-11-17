@@ -19,3 +19,15 @@
 
 //DSN=MY.TEST.GDG(-1)     -  PREVIOUS GEN
 
+******************************************
+>>>   DELETE DATASET
+//STEP01 EXEC PGM=IDCAMS 
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+  DELETE TEST.INPUT.FILE
+/*
+*************************************************
+READ MULTIPLE FILES AS ONE INPUT 
+//INFILE DD DSN=INPUT.FILE1,DISP=SHR
+//       DD DSN=INPUT.FILE2,DISP=SHR
+//       DD DSN=INPUT.FIL3,DISP=SHR
