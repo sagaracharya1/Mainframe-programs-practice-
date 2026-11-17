@@ -1,4 +1,4 @@
-### Write JCL TO execute a COBOL Program #####
+### Write JCL TO execute a COBOL Program #################
 //JOB001 JOB (123),'TEST' 
 
 //STEP01 EXEC PGM=PAYROLL
@@ -10,5 +10,16 @@
 //SYSPRINT DD SYSYOUT=*
 //SYSOUT DD SYSOUT=*
 
+*************************************************************
+####  CREATE AND USE TEMPORARY DATASET ######################
+//STEP01 EXEC PGM=SORT 
+//SORTIN  DD DSN=INPUT.NEW.FILE,DISP=SHR 
+//SORTOUT DD DSN=&&TEMPFIL,DISP=(NEW,PASS),
+//           SPACE=(TRK(5,5))
+//SYSIN DD * 
+   SORT FIELDS=(1,5,CH,A)
+/*
 
+//STEP02 EXEC PGM=MYPROG
+//INFILE DD DSN=&&TEMPFIL,DISP=(OLD,DELETE)       ------------------------ WHAT HAPPENS TO &&TEMPFIL AFTER JOB COMPLETION > DELETED AUTOMATICALLY 
 
