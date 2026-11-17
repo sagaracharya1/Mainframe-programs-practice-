@@ -1,0 +1,138 @@
+JCL to create an empty PS file
+
+//SAGAR01  JOB (ACCT),'CREATE PS',
+//             CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID
+//STEP01   EXEC PGM=IEFBR14
+//OUTFILE  DD DSN=SAGAR.TEST.PSFILE,
+//            DISP=(NEW,CATLG,DELETE),
+//            UNIT=SYSDA,
+//            SPACE=(TRK,(1,1),RLSE),
+//            DCB=(DSORG=PS,RECFM=FB,LRECL=80,BLKSIZE=800)
+
+******************************************************************************
+JCL to create a PS file with data
+If the interviewer asks you to create a PS file and write records into it:
+
+//SAGAR01  JOB (ACCT),'CREATE PS'
+//STEP01   EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSUT1   DD *
+HELLO MAINFRAME
+WELCOME TO COBOL JCL
+THIS IS MY FIRST PS FILE
+/*
+//SYSUT2   DD DSN=SAGAR.TEST.PSFILE,
+//            DISP=(NEW,CATLG,DELETE),
+//            UNIT=SYSDA,
+//            SPACE=(TRK,(1,1),RLSE),
+//            DCB=(DSORG=PS,RECFM=FB,LRECL=80,BLKSIZE=800)
+***********************************************************************************
+IEFBR14 – Create or delete datasets through DD allocation.
+IEBGENER – Copy data from one sequential dataset to another, or create a PS file with input data.
+
+
+1. Create an empty PS file
+Question: Write JCL to create a new sequential file.
+//JOB1     JOB (ACCT),'CREATE PS'
+//STEP1    EXEC PGM=IEFBR14
+//OUTFILE  DD DSN=SAGAR.TEST.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            UNIT=SYSDA,
+//            SPACE=(TRK,(1,1)),
+//            DCB=(DSORG=PS,RECFM=FB,LRECL=80)
+
+
+2. Copy one PS file into another PS file
+Question: Write JCL to copy data from input to output.
+//JOB1     JOB (ACCT),'COPY FILE'
+//STEP1    EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSUT1   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SYSUT2   DD DSN=SAGAR.OUTPUT.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(TRK,(1,1)),
+//            DCB=(RECFM=FB,LRECL=80)
+//
+
+
+3. Delete a PS file
+Question: Delete an existing dataset.
+//JOB1     JOB (ACCT),'DELETE FILE'
+//STEP1    EXEC PGM=IEFBR14
+//DD1      DD DSN=SAGAR.TEST.PS,
+//            DISP=(MOD,DELETE,DELETE)
+
+
+4. Sort records in ascending order
+Question: Sort input file based on the first 5 positions.
+//JOB1     JOB (ACCT),'SORT'
+//STEP1    EXEC PGM=SORT
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SORTOUT  DD DSN=SAGAR.OUTPUT.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(TRK,(1,1)),
+//            DCB=(RECFM=FB,LRECL=80)
+//SYSIN    DD *
+  SORT FIELDS=(1,5,CH,A)
+/*
+
+
+Logic: Sorts records using positions 1–5 in ascending order.
+5. Sort records in descending order
+//SYSIN DD *
+  SORT FIELDS=(1,5,CH,D)
+/*
+
+
+Logic: D = Descending, A = Ascending.
+6. Remove duplicate records
+Question: Remove duplicates based on the first 5 positions.
+//SYSIN DD *
+  SORT FIELDS=(1,5,CH,A)
+  SUM FIELDS=NONE
+/*
+
+
+Logic: Keeps one record for each unique key in positions 1–5.
+7. Select records using INCLUDE
+Question: Select records where position 1 contains A.
+//SYSIN DD *
+  SORT FIELDS=COPY
+  INCLUDE COND=(1,1,CH,EQ,C'A')
+/*
+
+
+Logic: Only records starting with A are selected.
+8. Select records using OMIT
+Question: Remove records where position 1 contains A.
+//SYSIN DD *
+  SORT FIELDS=COPY
+  OMIT COND=(1,1,CH,EQ,C'A')
+/*
+
+
+Logic: Records starting with A are excluded.
+9. Add a star (*) at the beginning of every output record
+Question: Add * to every record using DFSORT.
+//SYSIN DD *
+  SORT FIELDS=COPY
+  OUTREC BUILD=(C'*',1,79)
+/*
+
+
+Logic: Adds * in position 1 and copies 79 bytes from the input record.
+10. Count records in a PS file
+Question: Count the number of records in an input file.
+//JOB1     JOB (ACCT),'COUNT'
+//STEP1    EXEC PGM=SORT
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SORTOUT  DD DUMMY
+//SYSIN    DD *
+  SORT FIELDS=COPY
+  OUTFIL NODETAIL,REMOVECC,
+    TRAILER1=(C'TOTAL RECORDS: ',COUNT)
+/*
