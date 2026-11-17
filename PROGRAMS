@@ -23,3 +23,5 @@
 //STEP02 EXEC PGM=MYPROG
 //INFILE DD DSN=&&TEMPFIL,DISP=(OLD,DELETE)       ------------------------ WHAT HAPPENS TO &&TEMPFIL AFTER JOB COMPLETION > DELETED AUTOMATICALLY 
 
+******************************************************************
+
