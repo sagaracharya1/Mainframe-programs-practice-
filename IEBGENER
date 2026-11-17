@@ -1,4 +1,5 @@
 ######## COPYING FILE USING IEBGENER #########
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //STEP01 EXEC PGM=IEBGENER 
 //SYSUT1 DD DSN=INPUT.FILE,DISP=SHR
 //SYSUT2 DD DSN=OUTPUT.FILE,
