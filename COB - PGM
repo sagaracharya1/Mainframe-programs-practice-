@@ -1,0 +1,53 @@
+----- COBOL program to count records in a file ------
+IDENTIFICATION DIVISION.
+PROGRAM-ID. COUNTREC.
+
+ENVIRONMENT DIVISION.
+INPU-OUTPUT SECTION.
+FILE-CONTROL.
+   SELECT INPUT-FILE ASSING TO INFILE 
+   ORGANIZATION IS SEQUENTIAL 
+   FILE STATUS IS WS-FS.
+
+DATA DIVISION.
+FILE SECTION.
+FD INPUT-FILE.
+01 INUT-REC PIC X(80).
+
+WORKING-STOARGE SECTION.
+01 WS-COUNT PIC 9(5) VALUE ZERO.
+01 WS-FS PIC XX.
+
+PROCEDURE DIVISION.
+OPEN INPUT INPUT-FILE 
+
+PERFORM UNTIL WS-EOF = 'Y'
+   READ EMPFILE 
+     AT END 
+         MOVE 'Y' TO WS-EOF 
+     NOT AT END 
+        ADD 1 TO WS-COUNT 
+   END-READ
+END-PERFORM 
+
+DISPLAY WS-COUNT.
+
+*****************************************************************************8
+Simple explanation for interviewer
+1. OPEN INPUT – Opens the input file.
+2. READ – Reads one record at a time.
+3. ADD 1 TO WS-COUNT – Increments the counter for every record.
+4. AT END – Stops reading when the end of file is reached.
+5. CLOSE – Closes the file.
+6. DISPLAY – Displays the total record count.
+Important interview point: File status 10 indicates End Of File (EOF).
+
+Remember this logic:
+
+READ INPUT-FILE
+    AT END
+        SET EOF TO TRUE
+    NOT AT END
+        ADD 1 TO WS-COUNT
+END-READ
+
