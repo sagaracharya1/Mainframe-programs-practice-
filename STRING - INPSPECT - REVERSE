@@ -1,0 +1,26 @@
+Suppose we have SAGARA_N_BANGALORE OUT PUT WANTS === SAGARA BANGALORE
+
+You want to remove _N_ from the input and replace it with spaces.
+Input: 
+SAGARA_N_BANGALORE
+
+Expected output:
+SAGARA BANGALORE
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. REPLACE1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 WS-INPUT PIC X(20) VALUE 'SAGARA_N_BANGALORE'.
+
+PROCEDURE DIVISION.
+
+   INSPECT WS-INPUT 
+      REPLACING ALL '_' BY SPACE
+
+    DISPLAY 'OUTPUT: ' WS-INPUT
+STOP RUN.
+*****************************************************************************************
+
+
