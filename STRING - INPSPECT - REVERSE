@@ -22,5 +22,16 @@ PROCEDURE DIVISION.
     DISPLAY 'OUTPUT: ' WS-INPUT
 STOP RUN.
 *****************************************************************************************
+Important: The above replaces every underscore with a space.
+If you want exactly SAGARA BANGALORE
+
+       INSPECT WS-INPUT
+           REPLACING ALL '_N_' BY SPACE
+
+
+Expected output:
+SAGARA BANGALORE
+******************************************************************************************
+
 
 
