@@ -1,0 +1,5 @@
+--- browse recrods from a particular key ------
+START CUSTOMER_FILE 
+    KEY >= WS-CUST-ID 
+
+READ CUSTOMER-FILE NEXT RECORD 
