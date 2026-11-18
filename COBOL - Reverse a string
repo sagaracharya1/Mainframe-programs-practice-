@@ -46,3 +46,14 @@ STOP RUN.
 INPUT    : MAINFRAME
 REVERSED : EMARFNIAM
 
+Explanation for interview
+1. I starts from the last character (9).
+2. Read characters from right to left.
+3. J starts from position 1.
+4. Move each character into the output field.
+5. Repeat until all characters are reversed.
+
+Important interview concept:
+WS-INPUT(I:1) means read one character from position I.
+WS-OUTPUT(J:1) means move one character to position J.
+
