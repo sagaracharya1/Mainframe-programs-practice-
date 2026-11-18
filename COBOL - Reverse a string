@@ -17,3 +17,32 @@ DISPLAY 'INPUT : 'WS-INPUT
 DISPLAY 'REVERSED : 'WS-REVERSED
 
 STOP RUN.
+
+*********************************************************** 
+01 WS-INPUT PIC X(20) VALUE 'MAINFRAME'.
+       01 WS-OUTPUT PIC X(20).
+       01 I PIC 99.
+       01 J PIC 99.
+
+       PROCEDURE DIVISION.
+
+           MOVE 1 TO J
+
+           PERFORM VARYING I FROM 9 BY -1
+               UNTIL I < 1
+
+               MOVE WS-INPUT(I:1)
+                 TO WS-OUTPUT(J:1)
+
+               ADD 1 TO J
+
+           END-PERFORM
+
+           DISPLAY 'INPUT    : ' WS-INPUT
+           DISPLAY 'REVERSED : ' WS-OUTPUT
+
+           STOP RUN.
+
+INPUT    : MAINFRAME
+REVERSED : EMARFNIAM
+
