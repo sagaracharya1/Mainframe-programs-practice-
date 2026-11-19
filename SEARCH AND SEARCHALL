@@ -1,0 +1,283 @@
+1. SEARCH in COBOL
+Interview definition:
+
+SEARCH is a COBOL statement used to search for a particular value in a table (array). 
+It searches the table sequentially, one element at a time, until it finds the matching value or reaches the end.
+In simple words: It checks the first element, second element, third element, and continues until it finds the required value.
+
+Important points:
+- Used with an OCCURS table.
+- Searches sequentially.
+- Does not require the table to be sorted.
+- Uses an index.
+- Stops when the condition is satisfied or the table ends.
+Syntax
+SEARCH WS-TABLE
+    AT END
+        DISPLAY 'NOT FOUND'
+    WHEN WS-ID(WS-INDEX) = 103
+        DISPLAY 'RECORD FOUND'
+END-SEARCH.
+
+
+2. SEARCH – Practical program
+Question: We have 5 employee IDs. Search for employee ID 103.
+
+Input table:
+Index	Employee ID
+1	101
+2	102
+3	103
+4	104
+5	105
+
+Expected output
+EMPLOYEE FOUND
+EMPLOYEE ID: 103
+
+
+Complete COBOL program
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SEARCHPGM.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+
+01 WS-TABLE.
+   05 WS-EMP OCCURS 5 TIMES
+      INDEXED BY IDX.
+      10 WS-EMP-ID PIC 9(3).
+
+01 WS-SEARCH-ID PIC 9(3) VALUE 103.
+
+PROCEDURE DIVISION.
+
+    MOVE 101 TO WS-EMP-ID(1).
+    MOVE 102 TO WS-EMP-ID(2).
+    MOVE 103 TO WS-EMP-ID(3).
+    MOVE 104 TO WS-EMP-ID(4).
+    MOVE 105 TO WS-EMP-ID(5).
+
+    SET IDX TO 1
+
+    SEARCH WS-EMP
+       AT END
+          DISPLAY 'EMPLOYEE NOT FOUND'
+       WHEN WS-EMP-ID(IDX) = WS-SEARCH-ID
+          DISPLAY 'EMPLOYEE FOUND'
+          DISPLAY 'EMPLOYEE ID: '
+                  WS-EMP-ID(IDX)
+    END-SEARCH.
+
+    STOP RUN.
+
+
+How to explain this program:
+1. I declared an employee table using OCCURS 5 TIMES.
+2. I populated five employee IDs.
+3. I initialized the index.
+4. SEARCH checks each employee ID sequentially.
+5. When ID 103 matches, it displays employee found.
+6. If no match occurs, AT END executes.
+3. SEARCH ALL in COBOL
+Interview definition:
+
+SEARCH ALL is used to search a table using a binary search technique.
+
+Instead of checking every element sequentially, it repeatedly divides the search area into smaller sections.
+
+Important points:
+- Uses binary search.
+- Table must be sorted in the required key sequence.
+- Requires an OCCURS table with an appropriate ASCENDING KEY or DESCENDING KEY.
+- Uses an index.
+- Usually faster than SEARCH for large sorted tables.
+Syntax
+SEARCH ALL WS-TABLE
+    AT END
+        DISPLAY 'NOT FOUND'
+    WHEN WS-EMP-ID(IDX) = WS-SEARCH-ID
+        DISPLAY 'FOUND'
+END-SEARCH.
+
+
+4. SEARCH ALL – Complete COBOL program
+Question: Search employee ID 103 using binary search.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SEARCHALL.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+
+01 WS-TABLE.
+   05 WS-EMP OCCURS 5 TIMES
+      ASCENDING KEY IS WS-EMP-ID
+      INDEXED BY IDX.
+      10 WS-EMP-ID PIC 9(3).
+
+01 WS-SEARCH-ID PIC 9(3) VALUE 103.
+
+PROCEDURE DIVISION.
+
+    MOVE 101 TO WS-EMP-ID(1).
+    MOVE 102 TO WS-EMP-ID(2).
+    MOVE 103 TO WS-EMP-ID(3).
+    MOVE 104 TO WS-EMP-ID(4).
+    MOVE 105 TO WS-EMP-ID(5).
+
+    SEARCH ALL WS-EMP
+       AT END
+          DISPLAY 'EMPLOYEE NOT FOUND'
+       WHEN WS-EMP-ID(IDX) = WS-SEARCH-ID
+          DISPLAY 'EMPLOYEE FOUND'
+          DISPLAY 'EMPLOYEE ID: '
+                  WS-EMP-ID(IDX)
+    END-SEARCH.
+
+    STOP RUN.
+
+
+Expected output
+EMPLOYEE FOUND
+EMPLOYEE ID: 103
+
+
+How to explain this program in an interview:
+1. I declared an employee table using OCCURS 5 TIMES.
+2. I defined EMP-ID as the ascending search key.
+3. I loaded employee IDs in ascending order.
+4. I used SEARCH ALL to perform binary search.
+5. It searches by dividing the search range into smaller sections.
+6. If the ID matches, it displays employee found; otherwise, AT END executes.
+Important: Unlike SEARCH, SEARCH ALL does not require you to initialize the index using SET. COBOL controls the index during the binary search. The table must already be sorted according to the declared key. 
+IBM+1
+
+5. SEARCH vs SEARCH ALL – Most important interview question
+This is the comparison you should memorize.
+SEARCH	SEARCH ALL
+Sequential search	Binary search
+Checks one by one	Divides search range
+Table need not be sorted	Table must be sorted
+Index must be initialized	Index is managed automatically
+Uses WHEN condition	Uses WHEN condition
+Can use multiple relational conditions	Requires equality condition on declared key(s)
+Slower for large tables	Faster for large sorted tables
+Time complexity O(n)	Time complexity O(log n)
+
+Simple example to explain the difference
+Suppose you have 1,000 employee records and want to find employee ID 900.
+- SEARCH: Checks records sequentially until it finds 900.
+- SEARCH ALL: Uses binary search to narrow down the search range.
+For 1,000 records, binary search needs at most around 10 comparisons in the ideal case, while sequential search may need 900 comparisons.
+6. Expected CGI interview questions and answers
+These are the follow-up questions I would prepare.
+
+Q1. What is the main difference between SEARCH and SEARCH ALL?
+
+Answer: SEARCH performs sequential searching, whereas SEARCH ALL performs binary searching. SEARCH does not require sorted data, but SEARCH ALL requires sorted data.
+
+Q2. Why should the table be sorted for SEARCH ALL?
+
+Answer: Binary search works by dividing the search area based on the order of the values. If the table is not sorted, it may return incorrect or unpredictable results.
+
+Q3. Do we need SET INDEX before SEARCH?
+
+Answer: Yes. We need to initialize the index before executing SEARCH, generally using:
+SET IDX TO 1
+
+
+Q4. Do we need SET INDEX before SEARCH ALL?
+
+Answer: No. SEARCH ALL manages the index internally.
+
+Q5. What is AT END?
+
+Answer: AT END executes when the requested value is not found in the table.
+
+Q6. Can we use SEARCH on an unsorted table?
+
+Answer: Yes. SEARCH performs sequential searching, so sorting is not mandatory.
+
+Q7. Can we use SEARCH ALL on an unsorted table?
+
+Answer: No. The table must be ordered according to the declared key.
+
+Q8. Which is faster, SEARCH or SEARCH ALL?
+
+Answer: SEARCH ALL is generally faster for large sorted tables because it uses binary search.
+
+Q9. What is INDEXED BY?
+
+Answer: INDEXED BY defines an index-name used to access table occurrences during searching.
+
+Example:
+05 WS-EMP OCCURS 10 TIMES
+   INDEXED BY IDX.
+
+
+Q10. What is the difference between index and subscript?
+
+Answer:
+- Subscript is a numeric occurrence number.
+- Index is a displacement maintained by COBOL to locate a table occurrence.
+- We can use SET IDX TO 1 to initialize an index.
+Q11. Can SEARCH ALL search multiple keys?
+
+Answer: Yes. We can define multiple ascending or descending keys. When searching a secondary key, we must also include the preceding key conditions.
+
+Example:
+05 WS-EMP OCCURS 100 TIMES
+   ASCENDING KEY IS WS-DEPT-ID WS-EMP-ID
+   INDEXED BY IDX.
+
+
+Q12. Can SEARCH ALL use greater than or less than conditions?
+
+Answer: No. SEARCH ALL requires equality conditions for the declared search key.
+
+Q13. What happens if duplicate keys exist in SEARCH ALL?
+
+Answer: The table may contain duplicate key values, but SEARCH ALL does not guarantee which matching occurrence will be returned. If we need all matching records, we should use another approach.
+
+Q14. Can we use SEARCH ALL without INDEXED BY?
+
+Answer: No. SEARCH ALL requires an index-name associated with the table.
+
+Q15. What is the difference between SEARCH and PERFORM VARYING?
+
+Answer:
+- SEARCH is a COBOL table-search statement.
+- PERFORM VARYING is a looping statement.
+- Both can be used for sequential processing, but SEARCH provides built-in AT END and WHEN conditions.
+7. Practical coding questions interviewers may ask
+Try these scenarios:
+Scenario	Expected logic
+Search employee ID in an array	SEARCH
+Search account number in sorted table	SEARCH ALL
+Search customer name in unsorted table	SEARCH
+Search 10,000 sorted records	SEARCH ALL
+Find a particular element in a 1D array	SEARCH
+Search nested/multidimensional array	Nested SEARCH
+Find all matching values	PERFORM VARYING or another suitable loop
+Search a sorted table by multiple keys	SEARCH ALL with declared keys
+
+8. Quick revision – Remember these programs
+SEARCH – Sequential
+SET IDX TO 1
+
+SEARCH WS-EMP
+    AT END
+        DISPLAY 'NOT FOUND'
+    WHEN WS-EMP-ID(IDX) = WS-SEARCH-ID
+        DISPLAY 'FOUND'
+END-SEARCH
+
+
+
+SEARCH ALL – Binary
+SEARCH ALL WS-EMP
+    AT END
+        DISPLAY 'NOT FOUND'
+    WHEN WS-EMP-ID(IDX) = WS-SEARCH-ID
+        DISPLAY 'FOUND'
+END-SEARCH
