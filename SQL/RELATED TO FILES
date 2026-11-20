@@ -1,0 +1,86 @@
+Q1. Count total records
+SELECT COOUNT(*)
+FROM EMPLOYEES;
+
+Q2. Fetch duplicate records based on EMP_ID
+SELECT EMP-ID, COUNT(*)
+FROM EMPLOYEE
+GROUP BY EMP_ID 
+HAVING COUNT(*) > 1;
+
+Q3. Fetch second highest salary
+SELECT MAX(SALARY)
+FROM EMP
+WHERE SALARY < (SELECT MAX(SALARY)
+                FROM EMPLOYEE);
+
+Q4. Fetch highest salary
+SELECT MAX(SALARY)
+FROM EMP;
+
+Q5. Fetch records with salary greater than 40000
+SELECT *
+FROM EMP
+WHERE SALARY > 40000;
+
+Technical round quick revision
+1. How do you fetch duplicate records from a DB2 table?
+GROUP BY with HAVING COUNT(*) > 1.
+
+2. How do you count records in a sequential file?
+Use COBOL READ loop and increment a counter until end-of-file.
+
+3. How do you compare two sequential files?
+Use DFSORT JOINKEYS.
+
+4. How do you remove duplicate records from a file?
+SORT FIELDS with SUM FIELDS=NONE.
+
+5. How do you fetch records present in file 1 but missing in file 2?
+Use JOINKEYS with JOIN UNPAIRED,F1 and filter the indicator for F1-only records.
+
+
+Q1. Find duplicate employee names
+SELECT EMP_NAME, COUNT(*)
+FROM EMP
+GROUP BY EMP_NAME 
+HAVING COUNT(*) > 1;
+
+Q4. Find employees having the same salary
+SELECT SALARY, COUNT(*)
+FROM EMPLOYEE
+GROUP BY SALARY
+HAVING COUNT(*) > 1;
+
+Q7. Find maximum salary department-wise
+SELECT DEPT_ID, MAX(SALARY)
+FROM EMP
+GROUP BY DEPT_ID;
+
+Q8. Fetch employees whose name starts with S
+SELECT *
+FROM EMP
+WHERE EMP_NAME LIKE 'S%';
+
+Q9. Fetch employees who are not present in another table
+SELECT *
+FROM EMP
+WHERE NOT EXISTS
+(SELECT 1
+ FROM DEPARTMENT B
+ WHERE A.DEPT_ID = B.DEPT_ID);
+
+Q10. Update employee salary
+UPDATE EMPLOYEE 
+SET SALARY = 50000
+WHERE EMP_ID = 101;
+
+
+
+
+
+
+
+
+
+      
