@@ -1,0 +1,128 @@
+Q1. Display today's date.
+-------------------------
+SELECT CURRENT DATE 
+FROM SYSYIBM.SYSDUMMY1;
+
+
+Q2. Display current date and time.
+----------------------------------
+SELECT CURRENT TIMESTAMP
+FROM SYSIBM.SYSDUMMY1;
+
+Q3. Extract year, month and day.
+-------------------------------
+SELECT
+    YEAR(CURRENT DATE),
+    MONTH(CURRENT DATE),
+    DAY(CURRENT DATE)
+FROM SYSIBM.SYSDUMMY1;
+
+
+Q4. Retrieve records created today.
+-----------------------------------
+SELECT * 
+FROM EMPLOYEE
+WHERE CREATED_DATE = CURRENT DATE;
+
+
+Q5. Retrieve records created yesterday.
+SELECT *
+FROM EMPLOYEE
+WHERE CREATED_DATE = CURRENT DATE - 1 DAY;
+
+
+Q6. Retrieve records created in the last 7 days.>>>>><<<<<<<<
+SELECT *
+FROM EMPLOYEE
+WHERE CREATED_DATE >= CURRENT DATE - 7 DAYS;
+
+Q7. Retrieve records created in the last 30 days.
+SELECT * 
+FROM EMPLOYEE
+WHERE CREATED DATE >= CURRENT DATE - 30DAYS;
+
+
+Q8. Retrieve records from the previous month.
+SELECT *
+FROM EMPLOYEE
+WHERE CREATED_DATE >=
+      CURRENT DATE - (DAY(CURRENT DATE) - 1) DAYS
+      - 1 MONTH
+AND CREATED_DATE <
+      CURRENT DATE - (DAY(CURRENT DATE) - 1) DAYS;
+
+
+Q9. Retrieve employees joined in 2025.
+SELECT * 
+FROM EMPLOYEE
+WHERE YEAR(JOIN_DATE) = 2025;
+
+
+Q10. Retrieve employees who joined in January.
+SELECT *
+FROM EMPLOYEE
+WHERE MONTH(JOIN_DATE) = 1;
+
+
+3. Date calculation questions
+Q11. Add 10 days to current date.
+SELECT CURRENT DATE + 10 DAYS
+FROM SYSIBM.SYSDUMMY1;
+
+Q12. Subtract 5 days from current date.
+SELECT CURRENT DATE - 5 DAYS
+FROM SYSIBM.SYSDUMMY1;
+
+Q13. Add 2 months to current date.
+SELECT CURRENT DATE + 2 MONTHS
+FROM SYSIBM.SYSDUMMY1;
+
+Q14. Add 1 year to current date.
+SELECT CURRENT DATE + 1 YEAR
+FROM SYSIBM.SYSDUMMY1;
+
+Q15. Find employees whose joining date is older than 5 years.
+SELECT *
+FROM EMPLOYEE
+WHERE JOIN_DATE < CURRENT DATE - 5 YEARS;
+
+Find the number of days between joining date and current date.
+SELECT EMP_ID,
+       DAYS(CURRENT DATE) - DAYS(JOIN_DATE)
+       AS EXPERIENCE_DAYS
+FROM EMPLOYEE;
+
+Q16. Find records between two dates.
+SELECT *
+FROM EMPLOYEE
+WHERE JOIN_DATE BETWEEN
+      DATE('2025-01-01')
+AND   DATE('2025-12-31');
+
+
+Q17. Find employees whose birthday is today.
+SELECT *
+FROM EMPLOYEE
+WHERE MONTH(DOB) = MONTH(CURRENT DATE)
+AND DAY(DOB) = DAY(CURRENT DATE);
+
+Q18. Find employees who joined on weekends.
+SELECT *
+FROM EMPLOYEE
+WHERE DAYOFWEEK(JOIN_DATE) IN (1, 7);
+
+Q19. Find employees with NULL joining dates.
+SELECT *
+FROM EMPLOYEE
+WHERE JOIN_DATE IS NULL;
+
+If the interviewer asks date-related SQL, don't forget these three concepts:
+1. CURRENT DATE - 7 DAYS – date arithmetic.
+2. YEAR(JOIN_DATE) – extracting date parts.
+3. DAYS(CURRENT DATE) - DAYS(JOIN_DATE) – calculating date difference.
+
+
+
+
+
+
