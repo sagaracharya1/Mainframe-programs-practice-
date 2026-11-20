@@ -1,0 +1,315 @@
+Write JCL to create an empty PS file : 
+-------------------------------------
+Interview answer: IEFBR14 is commonly used to allocate an empty PS file.
+//SAGAR01  JOB (ACCT),'CREATE PS',
+//             CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID
+//STEP01   EXEC PGM=IEFBR14
+//OUTFILE  DD DSN=SAGAR.TEST.PSFILE,
+//            DISP=(NEW,CATLG,DELETE),
+//            UNIT=SYSDA,
+//            SPACE=(TRK,(1,1),RLSE),
+//            DCB=(DSORG=PS,RECFM=FB,LRECL=80,BLKSIZE=800)
+
+
+
+JCL to create a PS file with data
+If the interviewer asks you to create a PS file and write records into it:
+---------------------------------------------------------------
+//SAGAR01 JOB(ACCOUNT), PS FILE DATA', CLASS=A, MSGCALSS=X,NOTIFY=&SYSUID 
+//STEP01 EXEC PGM=IEBGENER 
+//SYSPRINT DD SYSOUT=*
+//SYSUT1 DD *
+HELLO MAINFRAME
+WELCOME TO COBOL JCL
+THIS IS MY FIRST PS FILE
+/*
+//SYSUT2 DD DSN=SAGAR.TEST.PSFILE,
+//          DISP=NEW,CATLG,DELETE,
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=800),
+//          SPACE=(CYL(5,5)),
+//          UNIT=SYSDA
+
+Important interview questions
+1. Which utility is used to create an empty PS file? IEFBR14
+2. Which utility is used to copy data into a PS file? IEBGENER
+3. What is DSORG=PS? Physical Sequential dataset.
+4. What is RECFM=FB? Fixed Block.
+5. What is LRECL=80? Each record contains 80 bytes.
+
+
+2. Copy one PS file into another PS file
+Write JCL to copy data from input to output.
+------------------------------------------
+//JOB1     JOB (ACCT),'COPY FILE'
+//STEP1    EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD DUMMY
+//SYSUT1   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SYSUT2   DD DSN=SAGAR.OUTPUT.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(TRK,(1,1)),
+//            DCB=(RECFM=FB,LRECL=80)
+//
+
+
+3. Delete a PS file
+Question: Delete an existing dataset.
+-------------------------------------
+//JOB1     JOB (ACCT),'DELETE FILE'
+//STEP1    EXEC PGM=IEFBR14
+//DD1      DD DSN=SAGAR.TEST.PS,
+//            DISP=(MOD,DELETE,DELETE)
+
+
+6. Remove duplicate records
+Question: Remove duplicates based on the first 5 positions.
+//SYSIN DD *
+  SORT FIELDS=(1,5,CH,A)
+  SUM FIELDS=NONE
+/*
+
+
+7. Select records using INCLUDE
+Question: Select records where position 1 contains A.
+//SYSIN DD *
+  SORT FIELDS=COPY
+  INCLUDE COND=(1,1,CH,EQ,C'A')
+/*
+Logic: Only records starting with A are selected.
+
+
+Select records using OMIT
+Question: Remove records where position 1 contains A.
+//SYSIN DD *
+  SORT FIELDS=COPY
+  OMIT COND=(1,1,CH,EQ,C'A')
+/*
+
+
+9. Add a star (*) at the beginning of every output record
+Question: Add * to every record using DFSORT.
+//SYSIN DD *
+  SORT FIELDS=COPY
+  OUTREC BUILD=(C'*',1,79)
+/*
+Logic: Adds * in position 1 and copies 79 bytes from the input record.
+
+
+10. Count records in a PS file
+Question: Count the number of records in an input file.
+//JOB1     JOB (ACCT),'COUNT'
+//STEP1    EXEC PGM=SORT
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SORTOUT  DD DUMMY
+//SYSIN    DD *
+  SORT FIELDS=COPY
+  OUTFIL REMOVECC,
+    TRAILER1=(C'TOTAL RECORDS: ',COUNT=M11, LENGHT=10)
+/*
+Logic: Counts input records and writes the total in the trailer.
+
+
+1. Which utility creates an empty PS file?
+Correct – IEFBR14 creates or deletes datasets through JCL allocation.
+
+4. Which utility copies one PS file to another?
+Correct – IEBGENER is commonly used to copy sequential datasets.
+
+Utility	Purpose
+IEFBR14	Create/delete datasets using DD allocation
+IEBGENER	Copy sequential files
+IEBCOPY	Copy/compress PDS or PDSE libraries
+IEBCOMPR	Compare two sequential datasets
+IDCAMS	VSAM dataset operations
+DFSORT / SORT	Sort records
+ICETOOL	Advanced file processing
+
+
+4. Copy one PDS to another PDS
+Utility: IEBCOPY
+--------------------------------------
+//JOB1     JOB (ACCT),'COPY PDS'
+//STEP1    EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=*
+//IN       DD DSN=SAGAR.INPUT.PDS,DISP=SHR
+//OUT      DD DSN=SAGAR.OUTPUT.PDS,DISP=OLD
+//SYSIN    DD *
+  COPY INDD=IN,OUTDD=OUT
+/*
+
+
+5. Copy only selected members from a PDS
+Utility: IEBCOPY
+//JOB1     JOB (ACCT),'SELECT MEMBERS'
+//STEP1    EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=*
+//IN       DD DSN=SAGAR.INPUT.PDS,DISP=SHR
+//OUT      DD DSN=SAGAR.OUTPUT.PDS,DISP=OLD
+//SYSIN    DD *
+  COPY INDD=IN,OUTDD=OUT
+  SELECT MEMBER=(PROG1,PROG2,PROG3)
+/*
+
+
+11. Add * at the beginning of every record
+Requirement:
+
+Input:
+SAGAR MAINFRAME
+COBOL DEVELOPER
+
+Expected output:
+*SAGAR MAINFRAME
+*COBOL DEVELOPER
+
+Utility: DFSORT – OUTREC
+//JOB1     JOB (ACCT),'ADD STAR'
+//STEP1    EXEC PGM=SORT
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SORTOUT  DD DSN=SAGAR.OUTPUT.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(TRK,(5,2)),
+//            DCB=(RECFM=FB,LRECL=81)
+//SYSIN    DD *
+  SORT FIELDS=COPY
+  OUTREC BUILD=(C'*',1,80)
+/*
+
+12. Add current date to every output record
+Requirement: Add current date at the beginning of each record in YYYYMMDD format.
+//JOB1     JOB (ACCT),'ADD DATE'
+//STEP1    EXEC PGM=SORT
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SORTOUT  DD DSN=SAGAR.OUTPUT.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(TRK,(5,2)),
+//            DCB=(RECFM=FB,LRECL=88)
+//SYSIN    DD *
+  SORT FIELDS=COPY
+  OUTREC BUILD=(DATE1,1,80)
+/*
+OUTPUT:
+20261120SAGAR MAINFRAME
+20261120COBOL DEVELOPER
+
+
+
+13. Count the total number of records
+Method 1: ICETOOL COUNT
+//JOB1     JOB (ACCT),'COUNT'
+//STEP1    EXEC PGM=ICETOOL
+//TOOLMSG  DD SYSOUT=*
+//DFSMSG   DD SYSOUT=*
+//IN       DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//TOOLIN   DD *
+  COUNT FROM(IN)
+/*
+
+Method 2: DFSORT trailer count
+//JOB1     JOB (ACCT),'COUNT'
+//STEP1    EXEC PGM=SORT
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//SORTOUT  DD DSN=SAGAR.OUTPUT.PS,
+//            DISP=(NEW,CATLG,DELETE),
+//            SPACE=(TRK,(5,2)),
+//            DCB=(RECFM=FB,LRECL=80)
+//SYSIN    DD *
+  SORT FIELDS=COPY
+  OUTFIL NODETAIL,REMOVECC,
+    TRAILER1=(C'TOTAL RECORDS: ',COUNT)
+/*
+
+
+
+14. Compare two sequential files
+Utility: IEBCOMPR
+//JOB1     JOB (ACCT),'COMPARE'
+//STEP1    EXEC PGM=IEBCOMPR
+//SYSPRINT DD SYSOUT=*
+//SYSUT1   DD DSN=SAGAR.FILE1,DISP=SHR
+//SYSUT2   DD DSN=SAGAR.FILE2,DISP=SHR
+//SYSIN    DD DUMMY
+
+
+15. Define a VSAM KSDS using IDCAMS
+Utility: IDCAMS
+//JOB1     JOB (ACCT),'DEFINE KSDS'
+//STEP1    EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  DEFINE CLUSTER -
+    (NAME(SAGAR.TEST.KSDS) -
+     INDEXED -
+     RECORDSIZE(80 80) -
+     KEYS(10 0) -
+     TRACKS(5 2)) -
+    DATA -
+    (NAME(SAGAR.TEST.KSDS.DATA)) -
+    INDEX -
+    (NAME(SAGAR.TEST.KSDS.INDEX))
+/*
+
+
+16. Delete a VSAM dataset
+Utility: IDCAMS
+//JOB1     JOB (ACCT),'DELETE VSAM'
+//STEP1    EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  DELETE SAGAR.TEST.KSDS CLUSTER PURGE
+/*
+
+
+7. Copy data from PS to VSAM using REPRO
+Utility: IDCAMS
+//JOB1     JOB (ACCT),'PS TO VSAM'
+//STEP1    EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=*
+//INFILE   DD DSN=SAGAR.INPUT.PS,DISP=SHR
+//OUTFILE  DD DSN=SAGAR.TEST.KSDS,DISP=OLD
+//SYSIN    DD *
+  REPRO INFILE(INFILE) -
+        OUTFILE(OUTFILE)
+/*
+
+
+18. List VSAM dataset information using LISTCAT
+Utility: IDCAMS
+//JOB1     JOB (ACCT),'LIST VSAM'
+//STEP1    EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  LISTCAT ENT(SAGAR.TEST.KSDS) ALL
+/*
+It can show:
+- Dataset name.
+- VSAM type.
+- Key length and position.
+- Record size.
+- Data and index components.
+
+
+
+
+Statement	Purpose
+SORT FIELDS=COPY	Copy without sorting
+SORT FIELDS=(1,5,CH,A)	Sort ascending
+SORT FIELDS=(1,5,CH,D)	Sort descending
+SUM FIELDS=NONE	Remove duplicate sort keys
+INCLUDE COND	Select matching records
+OMIT COND	Exclude matching records
+INREC	Format records before sorting
+OUTREC	Format records after sorting
+OUTFIL	Create output files and apply output processing
+JOINKEYS	Join two files using common keys
+
+
+
+
+
+
+
