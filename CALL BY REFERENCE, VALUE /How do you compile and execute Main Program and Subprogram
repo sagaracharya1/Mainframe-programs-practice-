@@ -1,0 +1,13 @@
+Scenario 1: Static CALL
+1. Write MAINPGM source.
+2. Write SUBPGM source.
+3. Compile both programs.
+4. Link-edit the Main Program with the Subprogram object module.
+5. Execute the linked load module.
+Scenario 2: Dynamic CALL
+1. Compile MAINPGM.
+2. Compile SUBPGM separately.
+3. Place the Subprogram load module in an accessible load library.
+4. Execute MAINPGM.
+5. When MAINPGM executes CALL, the system loads/resolves SUBPGM.
+The exact compile and binder JCL depends on your site's compiler procedures and load-library setup.
