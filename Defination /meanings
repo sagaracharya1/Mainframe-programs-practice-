@@ -1,0 +1,18 @@
+What is the difference between JCL and COBOL?
+JCL controls job execution and dataset allocation; COBOL contains the business logic.
+
+What is SYSLIB?
+The compiler’s copybook/include library concatenation, searched for COPY members.
+
+What is STEPLIB?
+A DD statement that tells the step where to find executable modules and required runtime libraries.
+
+What is DBRM?
+Database Request Module; produced during DB2 precompilation and used during BIND.
+
+What is BIND?
+The DB2 process that creates a plan or package from a DBRM and prepares SQL access paths.
+
+Why use GOBACK instead of STOP RUN in a called subprogram?
+GOBACK returns control to the caller; STOP RUN can terminate the entire run unit.
+
