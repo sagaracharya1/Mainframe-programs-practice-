@@ -1,0 +1,25 @@
+Main Program
+WORKING-STORAGE SECTION.
+01 WS-NUM PIC 9(3).
+
+PROCEDURE DIVISION.
+    CALL "SUBPGM"
+         USING WS-NUM.
+    STOP RUN.
+
+
+
+Subprogram
+LINKAGE SECTION.
+01 LK-NUM PIC 9(3).
+
+PROCEDURE DIVISION USING LK-NUM.
+    DISPLAY LK-NUM.
+    GOBACK.
+
+
+
+Three important keywords
+- CALL – Call another program.
+- USING – Pass parameters.
+- GOBACK – Return control.
