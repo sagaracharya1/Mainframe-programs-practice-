@@ -1,0 +1,25 @@
+SYSIN DD * is called In-stream data, not an In-stream Procedure or Cataloged Procedure.
+Explanation
+//STEP01   EXEC PGM=SORT
+//SYSIN    DD *
+  SORT FIELDS=(1,10,CH,A)
+/*
+
+
+- SYSIN DD * – Defines in-stream data directly inside the JCL.
+- SORT FIELDS – Control statements passed to the SORT program.
+- /* – Marks the end of the in-stream data.
+Difference between three types
+Type	Meaning
+In-stream data	Data or control statements coded directly in JCL using DD * or DD DATA
+In-stream PROC	Procedure written directly inside the JCL using PROC and PEND
+Cataloged PROC	Procedure stored in a procedure library (PDS/PDSE) and called using EXEC PROCNAME
+
+Interview question
+Q: What is the difference between In-stream PROC and In-stream data?
+
+Answer:
+- In-stream PROC contains reusable JCL steps and is defined using PROC and PEND.
+- In-stream data contains input data or control statements directly in JCL using DD * or DD DATA.
+Remember for interview
+SYSIN DD * = In-stream data. It is not a PROC.
