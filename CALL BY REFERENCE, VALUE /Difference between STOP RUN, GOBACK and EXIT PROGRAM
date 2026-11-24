@@ -1,0 +1,11 @@
+Statement	Meaning
+STOP RUN	     Terminates the entire COBOL run unit
+GOBACK	       Returns to the caller, or terminates if there is no caller
+EXIT PROGRAM	 Returns control from a called program to its caller
+
+Example:
+- Main Program: Usually uses STOP RUN to end execution.
+- Subprogram: Usually uses GOBACK to return control.
+- EXIT PROGRAM: Can be used when a Subprogram needs to return to its caller without terminating the run unit.
+
+Interview answer: We generally use GOBACK in a Subprogram because STOP RUN would terminate the entire application instead of just returning to the Main Program.
