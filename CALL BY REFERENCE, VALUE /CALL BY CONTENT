@@ -1,0 +1,130 @@
+CALL BY REFERENCE
+Interview answer:
+
+In CALL BY REFERENCE, the address of the variable is passed to the Subprogram.
+If the Subprogram modifies the variable, the changes are reflected in the Main Program.
+
+Syntax in Main Program:
+CALL "SUBPGM"
+     USING BY REFERENCE WS-NUM.
+
+
+Subprogram:
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SUBPGM.
+
+       DATA DIVISION.
+       LINKAGE SECTION.
+
+       01 LK-NUM PIC 9(3).
+
+       PROCEDURE DIVISION USING LK-NUM.
+
+           MOVE 500 TO LK-NUM.
+
+           GOBACK.
+
+
+Main Program:
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. MAINPGM.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+       01 WS-NUM PIC 9(3) VALUE 100.
+
+       PROCEDURE DIVISION.
+
+           CALL "SUBPGM"
+                USING BY REFERENCE WS-NUM.
+
+           DISPLAY "VALUE: " WS-NUM.
+
+           STOP RUN.
+
+
+Output:
+VALUE: 500
+
+
+Why 500?
+Because the Subprogram modified the original variable through its reference.
+
+
+CALL BY CONTENT
+Interview answer:
+
+In CALL BY CONTENT, a copy of the data is passed to the Subprogram.
+Changes made inside the Subprogram will not affect the original variable in the Main Program.
+
+Main Program:
+       CALL "SUBPGM"
+            USING BY CONTENT WS-NUM.
+
+
+Subprogram:
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SUBPGM.
+
+       DATA DIVISION.
+       LINKAGE SECTION.
+
+       01 LK-NUM PIC 9(3).
+
+       PROCEDURE DIVISION USING LK-NUM.
+
+           MOVE 500 TO LK-NUM.
+
+           GOBACK.
+
+
+Original Main Program value:
+WS-NUM = 100
+
+After calling the Subprogram:
+WS-NUM = 100
+The original value remains unchanged.
+
+
+============================================================================================================
+CALL BY VALUE
+Interview answer:
+
+In CALL BY VALUE, the value of the argument is passed to the Subprogram instead of its address.
+It is useful when we want to pass a value without sharing the original variable's storage.
+
+Syntax:
+CALL "SUBPGM"
+     USING BY VALUE WS-NUM.
+
+
+Subprogram:
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SUBPGM.
+
+       DATA DIVISION.
+       LINKAGE SECTION.
+
+       01 LK-NUM PIC S9(4) COMP-5.
+
+       PROCEDURE DIVISION USING LK-NUM.
+
+           DISPLAY "NUMBER: " LK-NUM.
+
+           GOBACK.
+
+
+For BY VALUE, ensure the argument and receiving parameter have compatible representations and usages. The receiving definition above is just an illustrative numeric example.
+Difference between all three
+
+Type	What is passed?	Original variable modified?
+BY REFERENCE	Address/reference	Yes, modifications can reflect
+BY CONTENT	Copy of data	No
+BY VALUE	Value itself	No
+
+Interview favourite
+Remember this simple line:
+- Reference = Original data.
+- Content = Copy of data.
+- Value = Actual value passed.
