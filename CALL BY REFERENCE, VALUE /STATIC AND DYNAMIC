@@ -1,0 +1,33 @@
+What is Static CALL and Dynamic CALL?
+Static CALL
+A Static CALL is resolved during the program's build/link-edit process. The called program is linked with the calling program.
+
+Syntax:
+CALL "SUBPGM".
+
+With IBM Enterprise COBOL, a literal CALL is generally static under the NODYNAM compiler option.
+
+
+Dynamic CALL
+A Dynamic CALL loads or resolves the called program at execution time.
+
+Syntax:
+       WORKING-STORAGE SECTION.
+
+       01 WS-PGM-NAME PIC X(8)
+          VALUE "SUBPGM".
+
+       PROCEDURE DIVISION.
+
+           CALL WS-PGM-NAME.
+
+           STOP RUN.
+
+
+A CALL using an identifier is dynamic in normal Enterprise COBOL usage.
+Static vs Dynamic
+Static CALL	Dynamic CALL
+Resolved at build time	Resolved at execution time
+Called program linked with caller	Called program loaded separately
+Generally uses more linked executable space	Called module can be shared/reused
+Literal CALL with NODYNAM	Identifier CALL or DYNAM option
