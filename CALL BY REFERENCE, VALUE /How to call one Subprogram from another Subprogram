@@ -1,0 +1,47 @@
+How to call one Subprogram from another Subprogram?
+This is sometimes called a nested program call in interviews, although the programs can be separate compilation units.
+
+Example:
+MAINPGM
+
+CALL SUBPGM1
+
+SUBPGM1
+
+CALL SUBPGM2
+
+SUBPGM2
+
+
+Here MAINPGM calls SUBPGM1, and SUBPGM1 calls SUBPGM2.
+
+SUBPGM1:
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SUBPGM1.
+
+       PROCEDURE DIVISION.
+
+           DISPLAY "INSIDE SUBPROGRAM 1".
+
+           CALL "SUBPGM2".
+
+           GOBACK.
+
+
+SUBPGM2:
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. SUBPGM2.
+
+       PROCEDURE DIVISION.
+
+           DISPLAY "INSIDE SUBPROGRAM 2".
+
+           GOBACK.
+
+
+Output:
+INSIDE SUBPROGRAM 1
+INSIDE SUBPROGRAM 2
+
+
+The control returns from SUBPGM2 to SUBPGM1, and then from SUBPGM1 to MAINPGM.
