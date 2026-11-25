@@ -1,0 +1,26 @@
+A COPYBOOK is a reusable piece of COBOL code that can be included in multiple COBOL programs.
+
+For example, suppose we have a customer record structure.
+
+Copybook: CUSTCOPY
+       01 WS-CUSTOMER-RECORD.
+          05 WS-CUST-ID   PIC 9(5).
+          05 WS-CUST-NAME PIC X(20).
+          05 WS-CUST-AGE  PIC 9(3).
+
+
+Main COBOL program:
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+
+           COPY CUSTCOPY.
+
+       PROCEDURE DIVISION.
+
+           MOVE 10001 TO WS-CUST-ID.
+           MOVE "SAGARA" TO WS-CUST-NAME.
+           MOVE 030 TO WS-CUST-AGE.
+
+           DISPLAY WS-CUSTOMER-RECORD.
+
+           STOP RUN.
