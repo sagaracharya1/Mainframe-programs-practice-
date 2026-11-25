@@ -1,0 +1,16 @@
+What are the different libraries required to run COBOL programs?
+Library	Purpose
+Source library	Stores COBOL source code
+Copybook library	Stores reusable COBOL data definitions
+Object library	Stores compiled object modules
+Load library	Stores executable load modules
+Procedure library	Stores cataloged JCL procedures
+DBRM library	Stores DB2 Database Request Modules
+
+
+USER.COBOL.SOURCE
+USER.COBOL.COPYLIB
+USER.COBOL.OBJLIB
+USER.COBOL.LOADLIB
+USER.JCL.PROCLIB
+USER.DB2.DBRMLIB
