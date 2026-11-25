@@ -1,0 +1,35 @@
+Normal COBOL	                             DB2 COBOL
+---------------------------------------------------------------
+Does not require DB2 access	Accesses DB2 tables
+Normal COBOL compilation	DB2 precompile + COBOL compilation
+
+No DBRM required	DBRM generated
+No DB2 package/plan required	DB2 package/plan required
+
+Usually executes using EXEC PGM	Commonly 
+executes through IKJEFT01 for DB2 batch
+
+
+Q1. What is the difference between JCL and COBOL?
+JCL is used to execute and control jobs, whereas COBOL is used to write business logic.
+
+Q2. What is STEPLIB?
+STEPLIB specifies the load library containing the executable program for that particular job step.
+
+Q3. What is SYSIN?
+SYSIN is commonly used to provide input data or control statements to a program.
+
+Q4. What is SYSOUT?
+SYSOUT is used to direct program output to a system output class.
+
+Q5. What is a copybook?
+A copybook is reusable COBOL code that can be included in multiple programs using COPY.
+
+Q6. What is DBRM?
+DBRM stands for Database Request Module. It contains information about the embedded SQL statements extracted during DB2 precompilation.
+
+Q7. What is BIND?
+BIND prepares DB2 packages or plans so that SQL statements can be executed.
+
+Q8. What is SQLCA?
+SQLCA stands for SQL Communication Area. It provides information about the execution status of SQL statements, including SQLCODE.
