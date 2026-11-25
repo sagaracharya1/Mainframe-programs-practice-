@@ -1,1 +1,43 @@
+create GDG BASE:
+We use the IBM utility IDCAMS with the DEFINE GENERATIONDATAGROUP command.
+
+//GDGCR JOB (ACCT),'CREATE GDG'
+//STEP01 EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+  DEFINE GDG -
+    (NAME(USER1.INPUT.GDG) -
+     LIMIT(5) -
+     SCRATCH -
+     NOEMPTY)
+/*
+Explanation of parameters:
+Parameter	Explanation
+NAME	Name of the GDG BASE
+LIMIT(5)	Maintains a maximum of 5 generations
+SCRATCH	Deletes the physical dataset when rolled off
+NOSCRATCH	Keeps the physical dataset when rolled off
+EMPTY	When the limit is reached, removes all existing generations
+NOEMPTY	When the limit is reached, removes only the oldest generation
+
+------------------------------------------------------------------------------
+How to create GDG generations
+//STEP02 EXEC PGM=IEFBR14
+//GDGFILE DD DSN=USER1.INPUT.GDG(+1),
+//           DISP=(NEW,CATLG,DELETE),
+//           SPACE=(TRK,(5,5)),
+//           DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)
+
+
+
+Remember these four combinations:
+          Parameters	Behaviour
+````````SCRATCH,EMPTY	Deletes all generations when limit is reached
+````````SCRATCH,NOEMPTY	Deletes only the oldest generation
+````````NOSCRATCH,EMPTY	Uncatalogs all generations
+````````NOSCRATCH,NOEMPTY	Uncatalogs only the oldest generation
+
+"GDG is used to maintain multiple versions of datasets. We create a GDG BASE using IDCAMS DEFINE GDG and specify parameters like LIMIT, SCRATCH, NOSCRATCH, EMPTY and NOEMPTY. We use (+1) to create a new generation, (0) for the current generation and (-1) for the previous generation."
+
+
 
