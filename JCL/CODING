@@ -293,7 +293,11 @@ It can show:
 - Data and index components.
 
 
+19.How do you create multiple output files from one input file?
+:Use OUTFIL with FNAMES. It lets one DFSORT pass create multiple output datasets, each with its own selection or formatting rules.
 
+OUTFIL FNAMES=OUT1,INCLUDE=(11,3,CH,EQ,C'IND')
+OUTFIL FNAMES=OUT2,INCLUDE=(11,3,CH,EQ,C'USA')
 
 Statement	Purpose
 SORT FIELDS=COPY	Copy without sorting
