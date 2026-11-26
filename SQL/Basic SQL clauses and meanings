@@ -10,3 +10,72 @@ JOIN	    Combine tables	      Retrieves related data from multiple tables.
 INSERT	  Add records	Inserts   new records into a table.
 UPDATE	  Modify records	      Updates existing records.
 DELETE	  Remove records	      Deletes records from a table.
+
+
+WHERE clause
+Meaning: WHERE is used to filter individual records based on a condition.
+
+Example: Display employees whose salary is greater than 30,000.
+SELECT *
+FROM EMPLOYEE
+WHERE SALARY > 30000;
+
+
+
+GROUP BY clause
+Meaning: GROUP BY is used to group records having the same values.
+
+Example: Find the number of employees in each department.
+SELECT DEPT_ID, COUNT(*)
+FROM EMPLOYEE
+GROUP BY DEPT_ID;
+
+
+HAVING clause
+Meaning: HAVING is used to filter grouped records.
+
+Example: Display departments having more than 5 employees.
+SELECT DEPT_ID, COUNT(*)
+FROM EMPLOYEE
+GROUP BY DEPT_ID
+HAVING COUNT(*) > 5;
+
+
+ORDER BY clause
+Meaning: ORDER BY sorts the output.
+
+Ascending order:
+SELECT *
+FROM EMPLOYEE
+ORDER BY SALARY ASC;
+
+Descending order:
+SELECT *
+FROM EMPLOYEE
+ORDER BY SALARY DESC;
+
+
+DISTINCT clause
+Meaning: Removes duplicate values from the result.
+SELECT DISTINCT DEPT_ID
+FROM EMPLOYEE;
+
+
+Most important interview question: WHERE vs HAVING
+WHERE	HAVING
+Filters individual rows	Filters groups
+Applied before GROUP BY	Applied after GROUP BY
+Generally used without aggregate functions	Commonly used with aggregate functions
+Filters records	Filters grouped results
+
+
+SQL execution order:
+--------------------
+Logical SQL execution order
+1. FROM – Identify the table.
+2. WHERE – Filter individual records.
+3. GROUP BY – Group records.
+4. HAVING – Filter groups.
+5. SELECT – Select required columns.
+6. DISTINCT – Remove duplicates.
+7. ORDER BY – Sort the output.
