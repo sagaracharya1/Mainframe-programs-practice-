@@ -1,0 +1,112 @@
+-- Employees whose name ends with 'a'
+SELECT * FROM employees
+WHERE name LIKE '%a';
+
+-- Employees whose name contains 'an'
+SELECT * FROM employees
+WHERE name LIKE '%an%';
+
+-- Employees whose name has exactly 5 characters
+SELECT * FROM employees
+WHERE LENGTH(name) = 5;
+
+-- Employees whose name starts with S and salary is above 50000
+SELECT * FROM employees
+WHERE name LIKE 'S%'
+  AND salary > 50000;
+
+
+-- Top 5 highest-paid employees
+SELECT name, salary
+FROM employees
+ORDER BY salary DESC
+LIMIT 5;
+
+-- Employees sorted by name alphabetically
+SELECT name, department, salary
+FROM employees
+ORDER BY name;
+
+########### Aggregation ####################
+-- Number of employees in each department
+SELECT department, COUNT(*) AS employee_count
+FROM employees
+GROUP BY department;
+
+-- Departments with more than 10 employees
+SELECT department, COUNT(*) AS employee_count
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 10;
+
+-- Average salary by department
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department;
+
+####### JOIN ##########
+-- Employee names with department names
+SELECT e.name, d.department_name
+FROM employees e
+JOIN departments d
+  ON e.department_id = d.department_id;
+
+-- Departments that have no employees
+SELECT d.department_name
+FROM departments d
+LEFT JOIN employees e
+  ON d.department_id = e.department_id
+WHERE e.emp_id IS NULL;
+
+
+#### SALARY ##########
+-- Second-highest distinct salary
+SELECT MAX(salary) AS second_highest_salary
+FROM employees
+WHERE salary < (SELECT MAX(salary) FROM employees);
+
+-- Highest-paid employee in each department
+SELECT name, department, salary
+FROM (
+  SELECT *,
+         DENSE_RANK() OVER (
+           PARTITION BY department
+           ORDER BY salary DESC
+         ) AS rnk
+  FROM employees
+) x
+WHERE rnk = 1;
+
+######## DUPLICATE AND NULL ############
+-- Find duplicate employee names
+SELECT name, COUNT(*) AS occurrences
+FROM employees
+GROUP BY name
+HAVING COUNT(*) > 1;
+
+-- Employees with no manager assigned
+SELECT *
+FROM employees
+WHERE manager_id IS NULL;
+
+
+######### SELF JOIN ##########
+-- Employees earning more than their manager
+SELECT e.name AS employee, m.name AS manager
+FROM employees e
+JOIN employees m
+  ON e.manager_id = m.emp_id
+WHERE e.salary > m.salary;
+
+
+Quick pattern cheat sheet
+Requirement	SQL pattern
+Starts with S	LIKE 'S%'
+Starts with S or R	LIKE 'S%' OR LIKE 'R%'
+Ends with “an”	LIKE '%an'
+Contains “an”	LIKE '%an%'
+Second character is “a”	LIKE '_a%'
+Exactly 4 characters	LIKE '____'
+Case-insensitive starts with S	UPPER(name) LIKE 'S%'
+
+
