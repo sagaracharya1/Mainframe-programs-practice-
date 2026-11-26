@@ -110,3 +110,70 @@ Exactly 4 characters	LIKE '____'
 Case-insensitive starts with S	UPPER(name) LIKE 'S%'
 
 
+#########################################################3
+WHERE: filters rows before aggregation.
+GROUP BY: creates one output row per group.
+HAVING: filters groups after aggregation.
+ORDER BY: sorts the final result.
+
+
+-- Employees earning above company average
+SELECT name, salary
+FROM employees
+WHERE salary > (
+  SELECT AVG(salary)
+  FROM employees
+);
+
+-- Employees in departments located in Mumbai
+SELECT name
+FROM employees
+WHERE department_id IN (
+  SELECT department_id
+  FROM departments
+  WHERE location = 'Mumbai'
+);
+
+| Concept           | Meaning                                                         |
+| ----------------- | --------------------------------------------------------------- |
+| Primary key       | Uniquely identifies each row; cannot be NULL                    |
+| Foreign key       | Links a column to a primary/unique key in another table         |
+| Unique constraint | Prevents duplicate values, but may allow NULL depending on DBMS |
+| NOT NULL          | Value must be provided                                          |
+| DEFAULT           | Value used when none is supplied                                |
+| CHECK             | Enforces a condition                                            |
+| Index             | Speeds up lookups; can slow inserts/updates                     |
+
+
+NULL handling
+-- NULL is not equal to anything, including NULL
+WHERE manager_id IS NULL
+WHERE manager_id IS NOT NULL
+
+-- Replace NULL in output
+SELECT COALESCE(manager_id, 0) AS manager
+FROM employees;
+
+-- Department-wise employee count, including departments with zero employees
+SELECT d.department_name,
+       COUNT(e.emp_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e
+  ON d.department_id = e.department_id
+GROUP BY d.department_name;
+
+
+
+| Topic                       | Difference                                                                                     |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| DELETE vs TRUNCATE          | DELETE can filter rows and may be rolled back; TRUNCATE removes all rows and is usually faster |
+| WHERE vs HAVING             | WHERE filters rows; HAVING filters groups                                                      |
+| UNION vs UNION ALL          | UNION removes duplicates; UNION ALL keeps them                                                 |
+| INNER JOIN vs LEFT JOIN     | Inner keeps matches only; left keeps all left-table rows                                       |
+| RANK() vs DENSE_RANK()      | RANK() skips ranks after ties; DENSE_RANK() does not                                           |
+| Primary key vs unique key   | Primary key identifies a row and is generally one per table; unique key prevents duplicates    |
+| GROUP BY vs window function | GROUP BY collapses rows; window functions retain rows                                          |
+
+
+
+
