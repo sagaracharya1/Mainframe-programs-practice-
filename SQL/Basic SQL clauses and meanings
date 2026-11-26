@@ -1,0 +1,12 @@
+SQL Clause	Meaning	Interview explanation
+SELECT	  Select columns	      Retrieves required columns from a table.
+FROM	    Source table	        Specifies which table we are retrieving data from.
+WHERE	    Filter records	      Filters individual rows based on a condition.
+GROUP BY	Group records	        Groups rows having the same values.
+HAVING	  Filter groups	        Filters grouped records based on a condition.
+ORDER BY	Sort records	        Sorts the result in ascending or descending order.
+DISTINCT	Remove duplicates	    Displays only unique records.
+JOIN	    Combine tables	      Retrieves related data from multiple tables.
+INSERT	  Add records	Inserts   new records into a table.
+UPDATE	  Modify records	      Updates existing records.
+DELETE	  Remove records	      Deletes records from a table.
